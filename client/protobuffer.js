@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const personMessages = require('../protobuffer/addressbook_pb')
 
-const postProtoBufferData = async (data) => {
+export const postProtoBufferData = async (data) => {
   try{
     console.log('data is', data)
     const res = await axios.post('/api/pb/send', data, {responseType: 'arraybuffer'})
