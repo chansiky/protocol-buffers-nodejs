@@ -5,85 +5,35 @@ const port = 3000
 
 const bodyParser = require('body-parser')
 
-/*
-//////////////////////////////////////////////////
-console.log("testing")
-const personMessages = require('./protobuffer/addressbook_pb')
 
-console.log("personMessages", personMessages)
-var message = new personMessages.Person()
-
-console.log("message:" , message)
-
-message.setName("John Doe");
-message.setId(25);
-
-// Serializes to a UInt8Array.
-var bytes = message.serializeBinary();
-
-var message2 = personMessages.Person.deserializeBinary(bytes);
-
-console.log("bytes:" , bytes)
-console.log("message2:" , message2)
-
-//////////////////////////////////////////////////
-*/
-
-/*
-app.use(
-  function( req, res, next ) {
-    var data = ''
-    req.on('data', function( chunk ) {
-      data += chunk
-      console.log('on data: ', chunk)
-    })
-    req.on('end', function() {
-      req.rawBody = data
-      console.log( 'on end: ', data )
-      if (data && data.indexOf('{') > -1 ) {
-        req.body = JSON.parse(data)
-      }
-      else{
-        req.body = data
-        console.log('rawData',req.body)
-      }
-      next()
-    })
-  }
-)
-*/
-
+//set up a separate middleware function to intercept 
+//raw streams and combine it into data
 app.use (function(req, res, next) {
-  console.log('using middleware for raw stream')
+  console.log('converting raw stream into data object')
   console.log('mime type is: ', req.is('*/*'))
-  //if (!req.is('application/octet-stream')) return next()
-  var data = [] // List of Buffer objects
+  
+  //create a list of all the incomgin data
+  var data = [] 
   req.on('data', function(chunk) {
-    console.log('received data: appending Buffer object:', chunk)
-      data.push(chunk) // Append Buffer object
-    console.log('current data is: ', data)
+    // Append Buffer object
+    console.log('receiving data: appending Buffer object with the following chunk:', chunk)
+    data.push(chunk) 
   })
   req.on('end', function() {
     if (data.length <= 0 ) return next()
-    data = Buffer.concat(data) // Make one large Buffer of it
-    console.log('Received buffer', data)
+    //create on large buffer
+    console.log('finished receiving data.')
+    data = Buffer.concat(data) 
+    console.log('Received buffer: ', data)
+
+    //append the data to 'request' 
     req.raw = data
     next()
   })
 })
 
-/*
-app.use(bodyParser.urlencoded({extended: true}))
 
-const options = {
-  inflate: true,
-  limit: '100kb',
-  type: 'application/octet-stream'
-};
-
-app.use(bodyParser.raw(options))
-*/
-
+app.use(bodyParser.json())
 
 app.use('/api', require('./server/api'))
 

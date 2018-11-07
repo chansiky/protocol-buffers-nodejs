@@ -1,0 +1,26 @@
+.container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.container *{
+  font-family: "lucida console";
+  text-align: center;
+  color: darkslategray;
+}
+
+#protobuffer-button{
+  height: 3em;
+  width: 300px;
+  color: white;
+}
+
+button{
+  border: none;
+  border-radius: 4px;
+  background-color: darkslategray;
+  color: white;
+}
+

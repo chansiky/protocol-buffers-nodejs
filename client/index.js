@@ -1,24 +1,31 @@
-//bundle maker
-import example from './example'
-example()
+import {postProtoBufferData} from './protobuffer'
+const personMessages = require('../protobuffer/addressbook_pb')
 
-import protobufferTest, {postProtoBufferData} from './protobuffer'
-
-
-function sendMessage(event){
-  if(event){
-    console.log(event)
-
-    protobufferTest()
-    
-  }else{
-    console.log('there was no message')
-  }
+function createExamplePBMessage(){
+  //first you instantiate the message
+  var message = new personMessages.Person()
+  
+  //then you can set the individual variables for the message
+  message.setName("John Doe");
+  message.setId(25);
+  
+  return message
 }
 
-const button = document.getElementById("button")
+function sendMessage(event){
+  //make an example protocol buffer message
+  const pBMessage = createExamplePBMessage()
+  console.log('PBMessage: ', pBMessage)
 
+  //serialize the message we want to send
+  const serializedMessage = pBMessage.serializeBinary();
+  console.log('Serialized Message: ', serializedMessage)
+  console.log('Serialized Message data type is: ', typeof(serializedMessage))
+  
+  //send the data to the server
+  postProtoBufferData(serializedMessage)
+}
+
+
+const button = document.getElementById("protobuffer-button")
 button.onclick = sendMessage
-
-let testDiv = document.getElementById("test")
-console.log('testDiv is',testDiv)

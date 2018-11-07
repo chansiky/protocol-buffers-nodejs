@@ -1,13 +1,16 @@
 <html>
   <head>
+    <link rel="stylesheet" href="styles.css">
     <script defer src="bundle.js">
     </script>
   </head>
   <body>
     <pre id="content"></pre>
-    <button id="button" onClick="sendMessage()">send message to server</button>
-    <div id="test">
-      divTest
+    <div class="container">
+      <h1 id="pbTitle" class="containerItem">
+        Protocol Buffer
+      </h1>
+      <button id="protobuffer-button" class="containerItem" onClick="sendMessage()">send</button>
     </div>
   </body>
 </html>
